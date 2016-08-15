@@ -24,10 +24,8 @@ public class RegisterService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response registerUser(User newUser) {
-		System.out.println(newUser);
 		userDAO.addUser(newUser);
 		return Response.ok().build();
-		// context.setCurrentUser(newUser);
 	}
 
 	@GET

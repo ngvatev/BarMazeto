@@ -208,6 +208,7 @@
 		$scope.orders = [];
 		$scope.makeOrder = function(){
 			$scope.orders = [];
+			bb = false;
 			for( var i = 0; i < $scope.products.length; i++){
 				if($scope.products[i].quantity > 0){
 					var object = {
@@ -216,10 +217,19 @@
 					}
 					$scope.orders.push(object);
 					console.log($scope.products[i].name + " : " + $scope.products[i].quantity)
+				} else if($scope.products[i].quantity < 0){
+					alert("Can't be negative");
+					bb = true;
+					break;
 				}
+			}
+			if(bb){
+				return;
 			}
 			$http.post("rest/order/make", $scope.orders).then(function (response) {
 				$window.location.href = "http://localhost:8080/go/order.html";
+			}, function (status, statusText) {
+				alert(statusText);
 			});
 			console.log($scope.orders);
 		}

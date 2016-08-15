@@ -42,6 +42,7 @@ public class OrderDao {
 		return orders;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void refactorTypes(List<Order> orders) {
 		for (Order order : orders) {
 			Date dNow = new Date();

@@ -201,6 +201,8 @@
 					function(response) {
 						$scope.get();
 						console.log("change");
+					}, function(){
+						alert("Please first Accept it");
 					});
 		}
 		$scope.details = [];

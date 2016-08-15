@@ -9,7 +9,6 @@
 		<class>go.go.model.Order</class>
 		<class>go.go.model.User</class>
 		<class>go.go.model.OrderedProducts</class>
-		<class>go.go.model.OrderView</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="none"/>
 			<property name="eclipselink.logging.level" value="FINEST" />
