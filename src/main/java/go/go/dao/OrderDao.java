@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Singleton;
+import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import go.go.enums.OrderType;
 import go.go.model.Order;
@@ -26,7 +28,7 @@ public class OrderDao {
 	public void updateOrder(Order order) {
 		manager.merge(order);
 	}
-	
+
 	public void deleteOrder(int id) {
 		manager.remove(getOrderById(id));
 	}
@@ -40,6 +42,19 @@ public class OrderDao {
 		List<Order> orders = manager.createQuery("SELECT p FROM Order p ").getResultList();
 		refactorTypes(orders);
 		return orders;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Order> getAllOrder(OrderType type) {
+		List<Order> orders = manager.createQuery("SELECT b FROM Order b where b.type=:type ").setParameter("type", type)
+				.getResultList();
+		return orders;
+	}
+
+	public double getOborot(){
+		@SuppressWarnings("unchecked")
+		TypedQuery<Double> query = (TypedQuery<Double>) manager.createNativeQuery("SELECT sum(p.price*o.quantity) FROM go.BarOrder bo join Ordered_Products o on bo.idOrder = o.idOrder join Product p on o.idProduct = p.IDPRODUCT where time_finished like '2016-08%'");
+		return query.getSingleResult();
 	}
 
 	@SuppressWarnings("deprecation")

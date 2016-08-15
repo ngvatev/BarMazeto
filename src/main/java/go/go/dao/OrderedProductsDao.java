@@ -6,7 +6,9 @@ import java.util.List;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import go.go.enums.OrderType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.utils.DaoUtils;
@@ -37,4 +39,13 @@ public class OrderedProductsDao {
 		}
 		return p;
 	}
+
+//	@SuppressWarnings("unchecked")
+//	public Collection<OrderedProducts> getAllOrderedProductsByType(OrderType type) {
+//		Query result = manager
+//				.createNativeQuery(
+//						"Select * from Ordered_Products ")
+//				.setParameter(1, type.toString());
+//		return result.getResultList();
+//	}
 }

@@ -3,7 +3,6 @@ package go.go.services;
 import java.net.HttpURLConnection;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -15,8 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import go.go.context.UserContext;
 import go.go.dao.OrderDao;
 import go.go.dao.OrderedProductsDao;
@@ -39,6 +36,7 @@ public class OrderService {
 
 	@Inject
 	private UserDao userDAO;
+	
 	@Inject
 	private ProductDao productDAO;
 
@@ -49,7 +47,7 @@ public class OrderService {
 	@Path("make")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response makeOrder(Collection<OrderedProducts> products) {
-		if(products.isEmpty()){
+		if (products.isEmpty()) {
 			return Response.status(HttpURLConnection.HTTP_NO_CONTENT).build();
 		}
 		int id = orderDAO.addOrder(new Order(Calendar.getInstance().getTime(),
