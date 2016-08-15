@@ -76,6 +76,7 @@ public class OrderService {
 			return Response.status(HttpURLConnection.HTTP_NOT_ACCEPTABLE).build();
 		System.out.println(type);
 		Order order = orderDAO.getOrderById(id);
+		System.err.println(order.getType());
 		if ((order.getType().equals(OrderType.POSTPONED) || order.getType().equals(OrderType.ACCEPTED))
 				&& OrderType.COMPLETED.toString().equals(type)) {
 			order.setType(OrderType.COMPLETED);

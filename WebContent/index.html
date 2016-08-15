@@ -28,6 +28,7 @@
 					<li class="active"><a href="index.html">Home</a></li>
 					<li><a href="order.html">Orders</a></li>
 					<li><a href="statistics.html">Statistics</a></li>
+					<li ng-show="register==true"><a href="register.html">Register</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li style="color: red"><br>Welcome, {{user}} !</li>
@@ -134,6 +135,7 @@
 		$scope.isAuthenticated = false;
 		$scope.user;
 		$scope.rola;
+		$scope.register = false;
 		$scope.authenticate = function(){
 			$http({
 				method : 'GET',
@@ -145,6 +147,9 @@
 				});
 				$http.get("rest/login/role").then(function(response) {
 					$scope.rola = response.data;
+					if($scope.rola == "MANAGER"){
+						$scope.register = true;
+					}
 				});
 			}).error(function(status, statusText) {
 				$window.location.href = "http://localhost:8080/go/login.html";

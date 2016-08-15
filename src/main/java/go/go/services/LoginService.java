@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 
 import go.go.context.UserContext;
 import go.go.dao.UserDao;
-import go.go.enums.UserRole;
 import go.go.model.User;
 
 @Stateless

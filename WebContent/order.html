@@ -177,7 +177,7 @@
 					$scope.get();
 				})
 				$http.get("rest/login/role").then(function(response) {
-					if(response.data == "BARMAN"){
+					if(response.data == "BARTENDER"){
 						$scope.rola = true;
 					}
 				});
