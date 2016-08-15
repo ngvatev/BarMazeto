@@ -30,11 +30,11 @@ public class LoginService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response loginUser(User user) {
-		boolean isUserValid = userDAO.validateUserCredentials(user.getUsername(), user.getPassword());
+		boolean isUserValid = userDAO.validateUserCredentials(user.getUsername().trim(), user.getPassword().trim());
 		if (!isUserValid) {
 			return Response.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
 		}
-		context.setCurrentUser(userDAO.getUserByUsername(user.getUsername()));
+		context.setCurrentUser(userDAO.getUserByUsername(user.getUsername().trim()));
 		return RESPONSE_OK;
 	}
 	
@@ -55,7 +55,7 @@ public class LoginService {
         if (context.getCurrentUser() == null) {
             return null;
         }
-        return context.getCurrentUser().getUsername();
+        return context.getCurrentUser().getUsername().trim();
     }
 	
 	@Path("role")
