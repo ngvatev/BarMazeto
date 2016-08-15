@@ -211,6 +211,12 @@
 					});
 		}
 
+		function timer(){
+			$scope.get();
+			setTimeout(timer,5000);
+		}
+		timer();
+		
 		$scope.logout = function() {
 			console.log("HERE");
 			$http.get("rest/logout").then(function(response) {

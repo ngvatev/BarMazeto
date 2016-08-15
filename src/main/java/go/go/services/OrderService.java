@@ -1,12 +1,8 @@
 package go.go.services;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -65,50 +61,42 @@ public class OrderService {
 	@Produces("application/json")
 	public Collection<Order> getOrders() {
 		Collection<Order> orders = orderDAO.getAllOrders();
-		for (Order order : orders) {
-			System.err.println(order.getTimeStarted());
-		}
 		return orders;
 	}
-	
+
 	@PUT
 	@Path("{idOrder}")
-	public void changeStatus(@PathParam("idOrder") int id, String type){
-		if (OrderType.POSTPONED.toString().equals(type) ||
-		    OrderType.WAITING.toString().equals(type))
+	public void changeStatus(@PathParam("idOrder") int id, String type) {
+		if (OrderType.POSTPONED.toString().equals(type) || OrderType.WAITING.toString().equals(type))
 			return;
-		//return;
+		// return;
 		System.out.println(type);
 		Order order = orderDAO.getOrderById(id);
-		if ((order.getType().equals(OrderType.POSTPONED) ||
-			 order.getType().equals(OrderType.ACCEPTED)) &&
-				OrderType.COMPLETED.toString().equals(type)) {
+		if ((order.getType().equals(OrderType.POSTPONED) || order.getType().equals(OrderType.ACCEPTED))
+				&& OrderType.COMPLETED.toString().equals(type)) {
 			order.setType(OrderType.COMPLETED);
 			order.setTimeFinished(Calendar.getInstance().getTime());
-		} else if (order.getType().equals(OrderType.WAITING) &&
-				   OrderType.ACCEPTED.toString().equals(type)) {
+		} else if (order.getType().equals(OrderType.WAITING) && OrderType.ACCEPTED.toString().equals(type)) {
 			order.setType(OrderType.ACCEPTED);
 			order.setBarman(userDAO.getUserByUsername(context.getCurrentUser().getUsername()));
 		} else
 			return;
-		
+
 		orderDAO.updateOrder(order);
 	}
-	
 
 	@GET
 	@Path("details/{idOrder}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<OrderedProducts> getDetails(@PathParam("idOrder") int id){
+	public Collection<OrderedProducts> getDetails(@PathParam("idOrder") int id) {
 		return orderedDAO.getAllOrderedProducts(orderDAO.getOrderById(id));
 	}
-	
+
 	@GET
 	@Path("type")
 	@Produces(MediaType.APPLICATION_JSON)
-	public OrderType[] getAllOrderTypes() {		
-		OrderType[] rv = {OrderType.ACCEPTED, 
-						  OrderType.COMPLETED};
+	public OrderType[] getAllOrderTypes() {
+		OrderType[] rv = { OrderType.ACCEPTED, OrderType.COMPLETED };
 		return rv;
-	}	
+	}
 }
