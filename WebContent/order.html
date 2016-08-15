@@ -66,9 +66,8 @@
 								data-target="#myModal2">Show details</button>
 							<button type="button" class="btn btn-danger btn"
 								ng-click="getTypes(product)" data-toggle="modal"
-								data-target="#myModal">Change Status</button>
+								data-target="#myModal" ng-show="rola==true">Change Status</button>
 						</td>
-
 					</tr>
 				</tbody>
 			</table>
@@ -166,6 +165,7 @@
 		$scope.user;
 		$scope.selected;
 		$scope.order;
+		$scope.rola;
 		$scope.authenticate = function() {
 			$http({
 				method : 'GET',
@@ -176,6 +176,11 @@
 					$scope.user = response.data;
 					$scope.get();
 				})
+				$http.get("rest/login/role").then(function(response) {
+					if(response.data == "BARMAN"){
+						$scope.rola = true;
+					}
+				});
 			}).error(function(status, statusText) {
 				$window.location.href = "http://localhost:8080/go/login.html";
 			})

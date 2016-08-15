@@ -69,7 +69,7 @@
 			</table>
 		</div>
 		<br> <br> <br>
-		<div class="centerdiv">
+		<div class="centerdiv" ng-show="showProducts == true">
 			<button type="button" class="btn btn-danger btn btn-lg"
 				ng-click="makeOrder()" ng-show="order">Make order</button>
 		</div>
@@ -133,6 +133,7 @@
 	app.controller('myCtrl', function($scope, $http, $window) {
 		$scope.isAuthenticated = false;
 		$scope.user;
+		$scope.rola;
 		$scope.authenticate = function(){
 			$http({
 				method : 'GET',
@@ -141,7 +142,10 @@
 				$scope.isAuthenticated = true;
 				$http.get("rest/login/current").then(function(response) {
 					$scope.user = response.data;
-				})
+				});
+				$http.get("rest/login/role").then(function(response) {
+					$scope.rola = response.data;
+				});
 			}).error(function(status, statusText) {
 				$window.location.href = "http://localhost:8080/go/login.html";
 			})
@@ -156,6 +160,7 @@
 			$scope.get();
 
 		};
+		$scope.showProducts = true;
 		$scope.get = function(){
 			$http.get("rest/product").then(function(response) {
 				$scope.products = response.data;
@@ -163,6 +168,11 @@
 		}
 		
 		$scope.getOrder = function() {
+			if($scope.rola != "WAITER"){
+				alert("Only waiters can make orders");
+				$scope.showProducts = false;
+				return;
+			}
 			if(!$scope.order){
 				$scope.order = !$scope.order;
 				$scope.get();

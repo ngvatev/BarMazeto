@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import go.go.context.UserContext;
 import go.go.dao.UserDao;
+import go.go.enums.UserRole;
 import go.go.model.User;
 
 @Stateless
@@ -34,7 +35,7 @@ public class LoginService {
 		if (!isUserValid) {
 			return Response.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
 		}
-		context.setCurrentUser(user);
+		context.setCurrentUser(userDAO.getUserByUsername(user.getUsername()));
 		return RESPONSE_OK;
 	}
 	
@@ -57,4 +58,16 @@ public class LoginService {
         }
         return context.getCurrentUser().getUsername();
     }
+	
+	@Path("role")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getRole(){
+		System.out.println("HERE");
+		if (context.getCurrentUser() == null) {
+            return null;
+        }
+        return context.getCurrentUser().getRole().toString();
+	}
+	
 }
