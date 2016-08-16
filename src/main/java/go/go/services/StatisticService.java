@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +24,7 @@ import go.go.enums.OrderType;
 import go.go.enums.ProductType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
+import go.go.model.Sales;
 @Path("statistic")
 @Stateless
 public class StatisticService {
@@ -56,6 +58,15 @@ public class StatisticService {
 	public Double getOborot(){
 		 NumberFormat formatter = new DecimalFormat("#0.00");
 		return Double.valueOf(formatter.format(orderDAO.getOborot()));
+	}
+	
+	@GET
+	@Path("/sales")
+	@Produces("application/json")
+	public Collection<Sales> asdasd(@QueryParam("date_from")int from, @QueryParam("date_to")int to) {
+		// /go/rest/statistics/sales?date_from=5&date_to=6
+		System.out.printf("%d",from);
+		return productDAO.getSales();
 	}
 
 }

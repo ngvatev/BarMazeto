@@ -67,6 +67,27 @@
 				</tbody>
 			</table>
 		</div>
+		<div ng-hide="sales != null">
+			<h1 style="color: red;">Don't have orders yet.</h1>
+		</div>
+		<div ng-show="sales != null">
+			<table>
+				<thead>
+					<tr>
+						<th>Product id</th>
+						<th>Product name</th>
+						<th>TimesSold</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="sale in sales">
+						<td>{{sale.productName}}</td>
+						<td>{{sale.idProduct}}</td>
+						<td>{{sale.timesSold}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="modal" id="myModal2" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -148,6 +169,10 @@
 					function(response) {
 						$scope.orders = response.data;
 					})
+			$http.get("rest/statistic/sales?date_from?date_from=5&date_to=6").then(
+					function(response) {
+				$scope.sales = response.data;
+			})
 		}
 		$scope.details = [];
 		$scope.showDetails = function(product) {
