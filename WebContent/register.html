@@ -28,7 +28,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div ng-app="myApp" ng-controller="myCtrl" data-ng-init="getRoles()">
+	<div ng-app="myApp" ng-controller="myCtrl" data-ng-init="authenticate()">
 		<div class="row ">
 			<div class="col-md-4 " style="padding-top: 140px;">
 				<div class="col-md-2 "></div>
@@ -75,13 +75,24 @@
 <script type="text/javascript">
 	var app = angular.module('myApp', []);
 	app.controller('myCtrl', function($scope, $http, $window) {
+		$scope.isAuthenticated = false;
+		$scope.rola;
 		$scope.roles;
-		$scope.getRoles = function(){
-			$http.get("rest/register").then(function(response){
-				$scope.roles = response.data;
-			})
-		};
 		$scope.role;
+		$scope.authenticate = function(){
+			$http.get("rest/login/role").then(function(response) {
+				$scope.rola = response.data;
+				if($scope.rola != "MANAGER"){
+					alert("Not a manager!");
+					console.log($scope.rola);
+					$window.location.href = "http://localhost:8080/go/login.html";
+				}
+				$http.get("rest/register").then(function(response){
+					$scope.roles = response.data;
+				})
+			});
+			
+		}
 		$scope.setRole = function(role){
 			$scope.role = role;
 		}

@@ -47,9 +47,11 @@ public class Order {
 	private OrderType type;
 
 	public Order() {
+		this.barman = null;
 	}
 	
 	public Order(Date timeStarted, User waiter, OrderType type) {
+		this();
 		this.timeStarted = timeStarted;
 		this.waiter = waiter;
 		this.type = type;

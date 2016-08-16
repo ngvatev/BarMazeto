@@ -3,6 +3,7 @@ package go.go.services;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.net.HttpURLConnection;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -36,9 +37,13 @@ public class ProductRest {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addProduct(Product product) {
+		if(isValid(product)){
+			return Response.status(HttpURLConnection.HTTP_NOT_ACCEPTABLE).build();
+		}
 		productDao.addProduct(product);
 		return RESPONSE_OK;
 	}
+
 
 	@DELETE
 	@Path("{productId}")
@@ -53,5 +58,9 @@ public class ProductRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductType[] getAllProductTypes() {
 		return ProductType.values();
+	}
+	
+	private boolean isValid(Product product) {
+		return product.getPrice() < 0 || product.getName().equals("");
 	}
 }

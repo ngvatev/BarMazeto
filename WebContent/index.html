@@ -28,6 +28,7 @@
 					<li class="active"><a href="index.html">Home</a></li>
 					<li><a href="order.html">Orders</a></li>
 					<li><a href="statistics.html">Statistics</a></li>
+					<li ng-show="register==true"><a href="register.html">Register</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li style="color: red"><br>Welcome, {{user}} !</li>
@@ -69,7 +70,7 @@
 			</table>
 		</div>
 		<br> <br> <br>
-		<div class="centerdiv">
+		<div class="centerdiv" ng-show="showProducts == true">
 			<button type="button" class="btn btn-danger btn btn-lg"
 				ng-click="makeOrder()" ng-show="order">Make order</button>
 		</div>
@@ -133,6 +134,8 @@
 	app.controller('myCtrl', function($scope, $http, $window) {
 		$scope.isAuthenticated = false;
 		$scope.user;
+		$scope.rola;
+		$scope.register = false;
 		$scope.authenticate = function(){
 			$http({
 				method : 'GET',
@@ -141,7 +144,13 @@
 				$scope.isAuthenticated = true;
 				$http.get("rest/login/current").then(function(response) {
 					$scope.user = response.data;
-				})
+				});
+				$http.get("rest/login/role").then(function(response) {
+					$scope.rola = response.data;
+					if($scope.rola == "MANAGER"){
+						$scope.register = true;
+					}
+				});
 			}).error(function(status, statusText) {
 				$window.location.href = "http://localhost:8080/go/login.html";
 			})
@@ -156,6 +165,7 @@
 			$scope.get();
 
 		};
+		$scope.showProducts = true;
 		$scope.get = function(){
 			$http.get("rest/product").then(function(response) {
 				$scope.products = response.data;
@@ -163,6 +173,11 @@
 		}
 		
 		$scope.getOrder = function() {
+			if($scope.rola != "WAITER"){
+				alert("Only waiters can make orders");
+				$scope.showProducts = false;
+				return;
+			}
 			if(!$scope.order){
 				$scope.order = !$scope.order;
 				$scope.get();
@@ -208,6 +223,7 @@
 		$scope.orders = [];
 		$scope.makeOrder = function(){
 			$scope.orders = [];
+			bb = false;
 			for( var i = 0; i < $scope.products.length; i++){
 				if($scope.products[i].quantity > 0){
 					var object = {
@@ -216,10 +232,19 @@
 					}
 					$scope.orders.push(object);
 					console.log($scope.products[i].name + " : " + $scope.products[i].quantity)
+				} else if($scope.products[i].quantity < 0){
+					alert("Can't be negative");
+					bb = true;
+					break;
 				}
+			}
+			if(bb){
+				return;
 			}
 			$http.post("rest/order/make", $scope.orders).then(function (response) {
 				$window.location.href = "http://localhost:8080/go/order.html";
+			}, function (status, statusText) {
+				alert(statusText);
 			});
 			console.log($scope.orders);
 		}

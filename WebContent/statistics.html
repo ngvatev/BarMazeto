@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Statistic - BarMazeto</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></link>
+<link
+	href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"
+	rel="stylesheet"></link>
+<link href="css/style.css" rel="stylesheet"></link>
+<script src="moment.js"></script>
+</head>
+<body>
+	<div ng-app="myApp" ng-controller="myCtrl" class="container"
+		data-ng-init="authenticate()" ng-show="isAuthenticated">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">BarMazeto</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="order.html">Orders</a></li>
+					<li class="active"><a href="statistics.html">Statistics</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li style="color: red"><br>Welcome, {{user}} !</li>
+					<li><a href="" ng-click="logout()">Sign out</a></li>
+				</ul>
+			</div>
+		</nav>
+		<br> <br> <br> <br> <br>
+		<div style="text-align: center; margin: 0 auto; padding-top: 60px;">
+			<button type="button" class="btn btn-info btn btn-lg"
+				ng-click="getPostoponed()">Get postponed orders</button>
+			<button type="button" class="btn btn-warning btn btn-lg"
+				ng-click="getOrder()">Order</button>
+		</div>
+		<div ng-show="orders != null">
+			<table>
+				<thead>
+					<tr>
+						<th>Time Started</th>
+						<th>Waiter</th>
+						<th>Type</th>
+						<th>Options</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="product in orders">
+						<td>{{product.order.timeStarted | jsDate}}</td>
+						<td>{{product.order.waiter.username}}</td>
+						<td>{{product.order.type}}</td>
+						<td>
+							<button type="button" class="btn btn-success btn"
+								ng-click="showDetails(product.order)" data-toggle="modal"
+								data-target="#myModal2">Show details</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal" id="myModal2" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header well3">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 style="color: white">
+							<span class="glyphicon glyphicon-eye-open"></span> Details
+						</h4>
+					</div>
+					<div class="modal-body" style="padding: 40px 50px;">
+						<form role="form">
+							<div class=" form-group has-feedback centerdiv">
+								<table>
+									<thead>
+										<tr>
+											<th>Product name</th>
+											<th>Quantity</th>
+											<th>Price</th>
+											<th>Sum</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="detail in details">
+											<td>{{detail.product.name}}</td>
+											<td>{{detail.quantity}}</td>
+											<td>{{detail.product.price}}</td>
+											<td>{{detail.product.price * detail.quantity}} <span
+												class="glyphicon glyphicon-eur "></span></td>
+										</tr>
+										<tr>
+											<td colspan="3">Total:</td>
+											<td>{{ getTotal() }} <span
+												class="glyphicon glyphicon-piggy-bank "></span></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer well3">
+						<button type="submit" class="btn btn-danger btn-default pull-left"
+							data-toggle="modal" data-dismiss="modal">
+							<span class="glyphicon glyphicon-remove"></span> Cancel
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope, $http, $window) {
+		$scope.isAuthenticated = false;
+		$scope.user;
+		$scope.selected;
+		$scope.orders;
+		$scope.rola;
+		$scope.authenticate = function() {
+			$http({
+				method : 'GET',
+				url : "rest/login/authenticated",
+			}).success(function(data) {
+				$scope.isAuthenticated = true;
+				$http.get("rest/login/current").then(function(response) {
+					$scope.user = response.data;
+				})
+				$http.get("rest/login/role").then(function(response) {
+					if (response.data == "BARTENDER") {
+						$scope.rola = true;
+					}
+				});
+			}).error(function(status, statusText) {
+				$window.location.href = "http://localhost:8080/go/login.html";
+			})
+		}
+		$scope.getPostoponed = function() {
+			$http.get("rest/statistic/" + "POSTPONED").then(
+					function(response) {
+						$scope.orders = response.data;
+					})
+		}
+		$scope.details = [];
+		$scope.showDetails = function(product) {
+			$http.get("rest/order/details/" + product.idOrder).then(
+					function(response) {
+						$scope.details = response.data;
+					});
+		}
+		$scope.getTotal = function() {
+			var total = 0;
+			for (var i = 0; i < $scope.details.length; i++) {
+				var product = $scope.details[i];
+				total += (product.product.price * product.quantity);
+			}
+			return total;
+		}
+	});
+	app.filter("jsDate", function() {
+		return function(x) {
+			if (typeof x === "undefined") {
+				return "";
+			}
+			return moment(x, "YYYYMMDDhhmmss").format("YYYY-MM-DD HH:mm:ss");
+		};
+	});
+</script>
+</html>
