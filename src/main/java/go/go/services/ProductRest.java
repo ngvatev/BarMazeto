@@ -44,7 +44,6 @@ public class ProductRest {
 		return RESPONSE_OK;
 	}
 
-
 	@DELETE
 	@Path("{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -61,7 +61,7 @@ public class StatisticService {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Double getOborot(){
-		 NumberFormat formatter = new DecimalFormat("#0.00");
+		NumberFormat formatter = new DecimalFormat("#0.00");
 		return Double.valueOf(formatter.format(orderDAO.getOborot()));
 	}
 	

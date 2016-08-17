@@ -45,7 +45,7 @@ public class LoginService {
         if (context.getCurrentUser() == null) {
             return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
         }
-        return RESPONSE_OK;
+		return RESPONSE_OK;
     }
 	
 	@Path("current")
@@ -55,7 +55,7 @@ public class LoginService {
         if (context.getCurrentUser() == null) {
             return null;
         }
-        return context.getCurrentUser().getUsername().trim();
+		return context.getCurrentUser().getUsername().trim();
     }
 	
 	@Path("role")
@@ -66,7 +66,7 @@ public class LoginService {
 		if (context.getCurrentUser() == null) {
             return null;
         }
-        return context.getCurrentUser().getRole().toString();
+		return context.getCurrentUser().getRole().toString();
 	}
 	
 }
