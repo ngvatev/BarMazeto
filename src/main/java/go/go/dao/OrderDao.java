@@ -1,17 +1,19 @@
 package go.go.dao;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Singleton;
-import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import go.go.enums.OrderType;
+import go.go.enums.StatisticsType;
 import go.go.model.Order;
+import go.go.model.User;
 import go.go.utils.DaoUtils;
 
 @Singleton
@@ -51,10 +53,44 @@ public class OrderDao {
 		return orders;
 	}
 
-	public double getOborot(){
-		@SuppressWarnings("unchecked")
-		TypedQuery<Double> query = (TypedQuery<Double>) manager.createNativeQuery("SELECT sum(p.price*o.quantity) FROM go.BarOrder bo join Ordered_Products o on bo.idOrder = o.idOrder join Product p on o.idProduct = p.IDPRODUCT where time_finished like '2016-08%'");
-		return query.getSingleResult();
+	@SuppressWarnings("unchecked")
+	public Double getOborotDaily() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		TypedQuery<Double> query = (TypedQuery<Double>) manager
+				.createNativeQuery(
+						"SELECT sum(p.price*o.quantity) FROM go.BarOrder bo join Ordered_Products o on bo.idOrder = o.idOrder "
+								+ "join Product p on o.idProduct = p.IDPRODUCT where day(time_finished) = ?")
+				.setParameter(1, cal.getTime().getDay());
+		if (queryDouble(query) == null) {
+			return 0.0;
+		} else {
+			return query.getSingleResult();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Double getOborotMonthly() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		TypedQuery<Double> query = (TypedQuery<Double>) manager
+				.createNativeQuery(
+						"SELECT sum(p.price*o.quantity) FROM go.BarOrder bo join Ordered_Products o on bo.idOrder = o.idOrder "
+								+ "join Product p on o.idProduct = p.IDPRODUCT where month(time_finished) = ?")
+				.setParameter(1, cal.getTime().getMonth() + 1);
+		if (queryDouble(query) == null) {
+			return 0.0;
+		} else {
+			return query.getSingleResult();
+		}
+	}
+
+	private Double queryDouble(TypedQuery<Double> query) {
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("deprecation")

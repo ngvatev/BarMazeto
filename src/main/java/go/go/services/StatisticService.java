@@ -25,6 +25,7 @@ import go.go.enums.ProductType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.model.Sales;
+
 @Path("statistic")
 @Stateless
 public class StatisticService {
@@ -40,11 +41,11 @@ public class StatisticService {
 	private UserDao userDAO;
 	@Inject
 	private ProductDao productDAO;
-	
+
 	@GET
 	@Path("{type}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<OrderedProducts> getAllOrderedProducts(@PathParam("type") OrderType type){
+	public Collection<OrderedProducts> getAllOrderedProducts(@PathParam("type") OrderType type) {
 		List<Order> orders = orderDAO.getAllOrder(type);
 		List<OrderedProducts> result = new ArrayList<OrderedProducts>();
 		for (Order order : orders) {
@@ -52,20 +53,31 @@ public class StatisticService {
 		}
 		return result;
 	}
-	
+
 	@GET
+	@Path("daily")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Double getOborot(){
-		 NumberFormat formatter = new DecimalFormat("#0.00");
-		return Double.valueOf(formatter.format(orderDAO.getOborot()));
+	public Double getTurnoverDaily() {
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		System.out.println(orderDAO.getOborotDaily());
+		return Double.valueOf(formatter.format(orderDAO.getOborotDaily()));
+//		return 0.0;
 	}
-	
+
+	@GET
+	@Path("monthly")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Double getTurnoverMonthly() {
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		return Double.valueOf(formatter.format(orderDAO.getOborotMonthly()));
+	}
+
 	@GET
 	@Path("/sales")
 	@Produces("application/json")
-	public Collection<Sales> asdasd(@QueryParam("date_from")int from, @QueryParam("date_to")int to) {
+	public Collection<Sales> asdasd(@QueryParam("date_from") int from, @QueryParam("date_to") int to) {
 		// /go/rest/statistics/sales?date_from=5&date_to=6
-		System.out.printf("%d",from);
+		System.out.printf("%d", from);
 		return productDAO.getSales();
 	}
 

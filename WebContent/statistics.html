@@ -37,101 +37,115 @@
 			</div>
 		</nav>
 		<br> <br> <br> <br> <br>
-		<div style="text-align: center; margin: 0 auto; padding-top: 60px;">
+		<div>
+		</div>
+		<div style="float: left; width:20%; height:auto; padding-top: 60px;">
 			<button type="button" class="btn btn-info btn btn-lg"
 				ng-click="getPostoponed()">Get postponed orders</button>
+			<br>
 			<button type="button" class="btn btn-warning btn btn-lg"
 				ng-click="getOrder()">Order</button>
+			<br>
+			<button type="button" class="btn btn-primary btn btn-lg"
+				ng-click="showTurnover()">Show turnover</button>
+			<br>
+			<span>Daily: {{daily}}</span>
+			<br>
+			<span>Monthly: {{monthly}}</span>
 		</div>
-		<div ng-show="orders != null">
-			<table>
-				<thead>
-					<tr>
-						<th>Time Started</th>
-						<th>Waiter</th>
-						<th>Type</th>
-						<th>Options</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="product in orders">
-						<td>{{product.order.timeStarted | jsDate}}</td>
-						<td>{{product.order.waiter.username}}</td>
-						<td>{{product.order.type}}</td>
-						<td>
-							<button type="button" class="btn btn-success btn"
-								ng-click="showDetails(product.order)" data-toggle="modal"
-								data-target="#myModal2">Show details</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div ng-hide="sales != null">
-			<h1 style="color: red;">Don't have orders yet.</h1>
-		</div>
-		<div ng-show="sales != null">
-			<table>
-				<thead>
-					<tr>
-						<th>Product id</th>
-						<th>Product name</th>
-						<th>TimesSold</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="sale in sales">
-						<td>{{sale.productName}}</td>
-						<td>{{sale.idProduct}}</td>
-						<td>{{sale.timesSold}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="modal" id="myModal2" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header well3">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 style="color: white">
-							<span class="glyphicon glyphicon-eye-open"></span> Details
-						</h4>
-					</div>
-					<div class="modal-body" style="padding: 40px 50px;">
-						<form role="form">
-							<div class=" form-group has-feedback centerdiv">
-								<table>
-									<thead>
-										<tr>
-											<th>Product name</th>
-											<th>Quantity</th>
-											<th>Price</th>
-											<th>Sum</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="detail in details">
-											<td>{{detail.product.name}}</td>
-											<td>{{detail.quantity}}</td>
-											<td>{{detail.product.price}}</td>
-											<td>{{detail.product.price * detail.quantity}} <span
-												class="glyphicon glyphicon-eur "></span></td>
-										</tr>
-										<tr>
-											<td colspan="3">Total:</td>
-											<td>{{ getTotal() }} <span
-												class="glyphicon glyphicon-piggy-bank "></span></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer well3">
-						<button type="submit" class="btn btn-danger btn-default pull-left"
-							data-toggle="modal" data-dismiss="modal">
-							<span class="glyphicon glyphicon-remove"></span> Cancel
-						</button>
+		<br>
+		<div style="float: right; width:50%; height:auto;">
+			<div ng-show="orders != null">
+				<table>
+					<thead>
+						<tr>
+							<th>Time Started</th>
+							<th>Waiter</th>
+							<th>Type</th>
+							<th>Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="product in orders">
+							<td>{{product.order.timeStarted | jsDate}}</td>
+							<td>{{product.order.waiter.username}}</td>
+							<td>{{product.order.type}}</td>
+							<td>
+								<button type="button" class="btn btn-success btn"
+									ng-click="showDetails(product.order)" data-toggle="modal"
+									data-target="#myModal2">Show details</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div ng-hide="sales != null">
+				<h1 style="color: red;">Don't have orders yet.</h1>
+			</div>
+			<div ng-show="sales != null">
+				<table>
+					<thead>
+						<tr>
+							<th>Product id</th>
+							<th>Product name</th>
+							<th>TimesSold</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="sale in sales">
+							<td>{{sale.productName}}</td>
+							<td>{{sale.idProduct}}</td>
+							<td>{{sale.timesSold}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal" id="myModal2" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header well3">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 style="color: white">
+								<span class="glyphicon glyphicon-eye-open"></span> Details
+							</h4>
+						</div>
+						<div class="modal-body" style="padding: 40px 50px;">
+							<form role="form">
+								<div class=" form-group has-feedback centerdiv">
+									<table>
+										<thead>
+											<tr>
+												<th>Product name</th>
+												<th>Quantity</th>
+												<th>Price</th>
+												<th>Sum</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="detail in details">
+												<td>{{detail.product.name}}</td>
+												<td>{{detail.quantity}}</td>
+												<td>{{detail.product.price}}</td>
+												<td>{{detail.product.price * detail.quantity}} <span
+													class="glyphicon glyphicon-eur "></span></td>
+											</tr>
+											<tr>
+												<td colspan="3">Total:</td>
+												<td>{{ getTotal() }} <span
+													class="glyphicon glyphicon-piggy-bank "></span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer well3">
+							<button type="submit"
+								class="btn btn-danger btn-default pull-left" data-toggle="modal"
+								data-dismiss="modal">
+								<span class="glyphicon glyphicon-remove"></span> Cancel
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -165,14 +179,13 @@
 			})
 		}
 		$scope.getPostoponed = function() {
-			$http.get("rest/statistic/" + "POSTPONED").then(
-					function(response) {
-						$scope.orders = response.data;
-					})
-			$http.get("rest/statistic/sales?date_from?date_from=5&date_to=6").then(
-					function(response) {
-				$scope.sales = response.data;
+			$http.get("rest/statistic/" + "POSTPONED").then(function(response) {
+				$scope.orders = response.data;
 			})
+			$http.get("rest/statistic/sales?date_from?date_from=5&date_to=6")
+					.then(function(response) {
+						$scope.sales = response.data;
+					})
 		}
 		$scope.details = [];
 		$scope.showDetails = function(product) {
@@ -180,6 +193,15 @@
 					function(response) {
 						$scope.details = response.data;
 					});
+		}
+		
+		$scope.showTurnover = function () {
+			$http.get("").then(function (response) {
+				$scope.daily = response.data;
+			});
+			$http.get("").then(function (response){
+				$scope.monthly = response.data;
+			});
 		}
 		$scope.getTotal = function() {
 			var total = 0;
