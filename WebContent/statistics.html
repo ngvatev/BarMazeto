@@ -67,6 +67,16 @@
 				</tbody>
 			</table>
 		</div>
+		<div>
+			<label class="control-label label label-success labelwidth">From:</label>
+			<input type="datetime-local" ng-model="date.from">
+			<label class="control-label label label-success labelwidth">To:</label>
+			<input type="datetime-local" ng-model="date.to">
+			
+			<button type="button" class="btn btn-success btn"
+								ng-click="sendDate(date)">View sales</button>
+		</div>
+		
 		<div ng-hide="sales != null">
 			<h1 style="color: red;">Don't have orders yet.</h1>
 		</div>
@@ -133,6 +143,36 @@
 							<span class="glyphicon glyphicon-remove"></span> Cancel
 						</button>
 					</div>
+					<div>
+						<label class="control-label label label-success labelwidth">From:</label>
+						<input type="datetime-local" ng-model="date.from">
+						<label class="control-label label label-success labelwidth">To:</label>
+						<input type="datetime-local" ng-model="date.to">	
+						<button type="button" class="btn btn-success btn"
+											ng-click="sendDate(date)">View sales</button>
+					</div>
+					
+					<div ng-hide="sales != null">
+						<h1 style="color: red;">Don't have sales yet.</h1>
+					</div>
+					<div ng-show="sales != null">
+						<table>
+							<thead>
+								<tr>
+									<th>Product id</th>
+									<th>Product name</th>
+									<th>TimesSold</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="sale in sales">
+									<td>{{sale.productName}}</td>
+									<td>{{sale.idProduct}}</td>
+									<td>{{sale.timesSold}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -169,8 +209,14 @@
 					function(response) {
 						$scope.orders = response.data;
 					})
-			$http.get("rest/statistic/sales?date_from?date_from=5&date_to=6").then(
+			$http.get("rest/statistic/sales?date_from="+5+"&date_to="+7).then(
 					function(response) {
+				$scope.sales = response.data;
+			})
+		}
+		$scope.sendDate = function (date) {
+			$http.get("rest/statistic/sales?date_from="+date.from+"&date_to="+date.to).then(
+					function(response){
 				$scope.sales = response.data;
 			})
 		}
