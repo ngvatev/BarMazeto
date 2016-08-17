@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
@@ -14,10 +15,9 @@ import go.go.context.UserContext;
 public class LogoutService {
 	
 	@Inject
-    private UserContext context;
-
+	private UserContext context;
 	
-	@GET
+	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void logout(){
 		context.setCurrentUser(null);
