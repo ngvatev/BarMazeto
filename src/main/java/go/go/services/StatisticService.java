@@ -17,14 +17,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import go.go.dao.OrderDao;
 import go.go.dao.OrderedProductsDao;
 import go.go.dao.ProductDao;
 import go.go.dao.UserDao;
 import go.go.enums.OrderType;
-import go.go.enums.ProductType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.model.Sales;
@@ -33,11 +31,8 @@ import go.go.model.Sales;
 @Path("statistic")
 @Stateless
 public class StatisticService {
-	private static final Response RESPONSE_OK = Response.ok().build();
-
 	@Inject
 	private OrderDao orderDAO;
-
 	@Inject
 	private OrderedProductsDao orderedDAO;
 
@@ -50,7 +45,7 @@ public class StatisticService {
 	@Path("{type}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<OrderedProducts> getAllOrderedProducts(@PathParam("type") OrderType type) {
-		List<Order> orders = orderDAO.getAllOrder(type);
+		List<Order> orders = orderDAO.getAllOrdersByType(type);
 		List<OrderedProducts> result = new ArrayList<OrderedProducts>();
 		for (Order order : orders) {
 			result.addAll(orderedDAO.getAllOrderedProducts(order));
@@ -63,8 +58,8 @@ public class StatisticService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Double getTurnoverDaily() {
 		NumberFormat formatter = new DecimalFormat("#0.00");
-		System.out.println(orderDAO.getOborotDaily());
-		return Double.valueOf(formatter.format(orderDAO.getOborotDaily()));
+		System.out.println(orderDAO.getDailyIncome());
+		return Double.valueOf(formatter.format(orderDAO.getDailyIncome()));
 //		return 0.0;
 	}
 
@@ -73,14 +68,13 @@ public class StatisticService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Double getTurnoverMonthly() {
 		NumberFormat formatter = new DecimalFormat("#0.00");
-		return Double.valueOf(formatter.format(orderDAO.getOborotMonthly()));
-
+		return Double.valueOf(formatter.format(orderDAO.getMonthlyIncome()));
 	}
 
 	@GET
 	@Path("sales")
 	@Produces("application/json")
-	public Collection<Sales> asdasd(@QueryParam("date_from")String from, @QueryParam("date_to")String to) {
+	public Collection<Sales> getSales(@QueryParam("date_from") String from, @QueryParam("date_to") String to) {
 		// /go/rest/statistics/sales?date_from=date1&date_to=date2
 		// Tue Aug 02 2016 11:11:00 GMT 0300 (FLE Daylight Time)
 		System.out.println("HERE Sales");
@@ -88,15 +82,15 @@ public class StatisticService {
 		System.out.println("XXXXXXXXXXXXXXXXXXX");
 		System.out.println(from);
 		System.out.println(to);
-		Date dateFrom = new Date (), dateTo = new Date ();
+		Date dateFrom = new Date(), dateTo = new Date();
 		try {
-			dateFrom = format.parse (from);
-			dateTo = format.parse (to);
+			dateFrom = format.parse(from);
+			dateTo = format.parse(to);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return productDAO.getSales(dateFrom, dateTo);
 	}
 
