@@ -70,7 +70,7 @@ public class UserDao {
 
 	private String getHashedPassword(String password) {
 		try {
-			MessageDigest mda = MessageDigest.getInstance("SHA-512");
+			MessageDigest mda = MessageDigest.getInstance("SHA-1");
 			password = new String(mda.digest(password.getBytes()));
 		} catch (Exception e) {
 			e.printStackTrace();
