@@ -44,14 +44,14 @@ public class OrderDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Order> getAllOrder(OrderType type) {
+	public List<Order> getAllOrdersByType(OrderType type) {
 		List<Order> orders = manager.createQuery("SELECT b FROM Order b where b.type=:type ").setParameter("type", type)
 				.getResultList();
 		return orders;
 	}
 
 	@SuppressWarnings("unchecked")
-	public Double getOborotDaily() {
+	public Double getDailyIncome() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		TypedQuery<Double> query = (TypedQuery<Double>) manager
@@ -67,7 +67,7 @@ public class OrderDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Double getOborotMonthly() {
+	public Double getMonthlyIncome() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		TypedQuery<Double> query = (TypedQuery<Double>) manager
