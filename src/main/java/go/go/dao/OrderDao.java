@@ -1,6 +1,5 @@
 package go.go.dao;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,9 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import go.go.enums.OrderType;
-import go.go.enums.StatisticsType;
 import go.go.model.Order;
-import go.go.model.User;
 import go.go.utils.DaoUtils;
 
 @Singleton
@@ -47,14 +44,14 @@ public class OrderDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Order> getAllOrder(OrderType type) {
+	public List<Order> getAllOrdersByType(OrderType type) {
 		List<Order> orders = manager.createQuery("SELECT b FROM Order b where b.type=:type ").setParameter("type", type)
 				.getResultList();
 		return orders;
 	}
 
 	@SuppressWarnings("unchecked")
-	public Double getOborotDaily() {
+	public Double getDailyIncome() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		TypedQuery<Double> query = (TypedQuery<Double>) manager
@@ -70,7 +67,7 @@ public class OrderDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Double getOborotMonthly() {
+	public Double getMonthlyIncome() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		TypedQuery<Double> query = (TypedQuery<Double>) manager
@@ -96,7 +93,7 @@ public class OrderDao {
 	@SuppressWarnings("deprecation")
 	private void refactorTypes(List<Order> orders) {
 		for (Order order : orders) {
-			Date dNow = new Date();
+			Date dNow;
 			Calendar cal = Calendar.getInstance();
 			Date date = cal.getTime();
 			cal.setTime(order.getTimeStarted());
