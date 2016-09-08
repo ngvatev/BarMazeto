@@ -31,6 +31,7 @@ public class LoginService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response loginUser(User user) {
 		boolean isUserValid = userDAO.validateUserCredentials(user.getUsername().trim(), user.getPassword().trim());
+		System.err.println(isUserValid);
 		if (!isUserValid) {
 			return Response.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
 		}

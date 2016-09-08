@@ -24,11 +24,12 @@ public class UserDao {
 
 	public boolean validateUserCredentials(String userName, String password) {
 		System.out.println(userName + "..." + password);
-		String txtQuery = "SELECT u FROM User u WHERE u.username=:userName AND u.password=:password";
+		String txtQuery = "SELECT u FROM User u WHERE u.username = :userName AND u.password = :password";
 		TypedQuery<User> query = manager.createQuery(txtQuery, User.class);
 		query.setParameter("userName", userName);
 		query.setParameter("password", getHashedPassword(password));
 		return queryUser(query) != null;
+//		return true;
 	}
 
 	public List<User> listUsers() {
@@ -44,8 +45,12 @@ public class UserDao {
 	}
 
 	public User getUserByUsername(String uname) {
-		return (User) manager.createQuery("SELECT u FROM User u WHERE u.username = \'" + uname + "\'")
-				.getSingleResult();
+		String sql = "SELECT u FROM User u WHERE u.username = :uname";
+		TypedQuery<User> query = manager.createQuery(sql, User.class);
+//		return (User) manager.createQuery("SELECT u FROM User u WHERE u.username = \'" + uname + "\'")
+//				.getSingleResult();
+		query.setParameter("uname", uname);
+		return queryUser(query);
 	}
 
 	public void updateUser(User user) {
@@ -62,19 +67,23 @@ public class UserDao {
 
 	private User queryUser(TypedQuery<User> query) {
 		try {
+			System.err.println("HERE QUERY");
+			System.out.println(query.getSingleResult());
 			return query.getSingleResult();
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
 
 	private String getHashedPassword(String password) {
 		try {
-			MessageDigest mda = MessageDigest.getInstance("SHA-512");
+			MessageDigest mda = MessageDigest.getInstance("SHA-256");
 			password = new String(mda.digest(password.getBytes()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(password);
 		return password;
 	}
 }

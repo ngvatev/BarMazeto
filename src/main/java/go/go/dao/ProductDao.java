@@ -38,6 +38,7 @@ public class ProductDao {
 		return manager.createQuery("SELECT p FROM Product p where p.name = :name", Product.class).setParameter("name", name).getResultList().get(0);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Sales> getSales (Date from, Date to){
 		// query in JPQL format 
 		String query = 	"SELECT NEW go.go.model.Sales (p.name, p.idProduct, SUM(op.quantity)) " +
@@ -50,7 +51,6 @@ public class ProductDao {
 		Query q = manager.createQuery(query, Sales.class);
 		q.setParameter("from", from, TemporalType.TIMESTAMP);
 		q.setParameter("to", to, TemporalType.TIMESTAMP);
-		
 		List<Sales> sales = q.getResultList();
 		
 		return sales;

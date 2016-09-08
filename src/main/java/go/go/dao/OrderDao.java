@@ -1,6 +1,5 @@
 package go.go.dao;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,9 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import go.go.enums.OrderType;
-import go.go.enums.StatisticsType;
 import go.go.model.Order;
-import go.go.model.User;
 import go.go.utils.DaoUtils;
 
 @Singleton
@@ -61,7 +58,7 @@ public class OrderDao {
 				.createNativeQuery(
 						"SELECT sum(p.price*o.quantity) FROM go.BarOrder bo join Ordered_Products o on bo.idOrder = o.idOrder "
 								+ "join Product p on o.idProduct = p.IDPRODUCT where day(time_finished) = ?")
-				.setParameter(1, cal.getTime().getDay());
+				.setParameter(1, cal.getTime().getDate());
 		if (queryDouble(query) == null) {
 			return 0.0;
 		} else {

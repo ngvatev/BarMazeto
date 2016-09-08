@@ -17,7 +17,7 @@ public class LogoutService {
 	@Inject
 	private UserContext context;
 	
-	@POST
+	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void logout(){
 		context.setCurrentUser(null);

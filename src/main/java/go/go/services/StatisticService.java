@@ -17,14 +17,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import go.go.dao.OrderDao;
 import go.go.dao.OrderedProductsDao;
 import go.go.dao.ProductDao;
 import go.go.dao.UserDao;
 import go.go.enums.OrderType;
-import go.go.enums.ProductType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.model.Sales;
@@ -33,7 +30,6 @@ import go.go.model.Sales;
 @Path("statistic")
 @Stateless
 public class StatisticService {
-	private static final Response RESPONSE_OK = Response.ok().build();
 
 	@Inject
 	private OrderDao orderDAO;
@@ -63,9 +59,7 @@ public class StatisticService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Double getTurnoverDaily() {
 		NumberFormat formatter = new DecimalFormat("#0.00");
-		System.out.println(orderDAO.getOborotDaily());
 		return Double.valueOf(formatter.format(orderDAO.getOborotDaily()));
-//		return 0.0;
 	}
 
 	@GET

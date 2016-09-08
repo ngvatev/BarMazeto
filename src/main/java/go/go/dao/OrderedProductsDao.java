@@ -6,9 +6,6 @@ import java.util.List;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import go.go.enums.OrderType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.utils.DaoUtils;
