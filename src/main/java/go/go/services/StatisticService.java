@@ -2,9 +2,12 @@ package go.go.services;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Date;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,6 +28,7 @@ import go.go.enums.ProductType;
 import go.go.model.Order;
 import go.go.model.OrderedProducts;
 import go.go.model.Sales;
+
 
 @Path("statistic")
 @Stateless
@@ -70,15 +74,30 @@ public class StatisticService {
 	public Double getTurnoverMonthly() {
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		return Double.valueOf(formatter.format(orderDAO.getOborotMonthly()));
+
 	}
 
 	@GET
-	@Path("/sales")
+	@Path("sales")
 	@Produces("application/json")
-	public Collection<Sales> asdasd(@QueryParam("date_from") int from, @QueryParam("date_to") int to) {
-		// /go/rest/statistics/sales?date_from=5&date_to=6
-		System.out.printf("%d", from);
-		return productDAO.getSales();
+	public Collection<Sales> asdasd(@QueryParam("date_from")String from, @QueryParam("date_to")String to) {
+		// /go/rest/statistics/sales?date_from=date1&date_to=date2
+		// Tue Aug 02 2016 11:11:00 GMT 0300 (FLE Daylight Time)
+		System.out.println("HERE Sales");
+		SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss");
+		System.out.println("XXXXXXXXXXXXXXXXXXX");
+		System.out.println(from);
+		System.out.println(to);
+		Date dateFrom = new Date (), dateTo = new Date ();
+		try {
+			dateFrom = format.parse (from);
+			dateTo = format.parse (to);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return productDAO.getSales(dateFrom, dateTo);
 	}
 
 }

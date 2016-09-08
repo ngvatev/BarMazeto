@@ -148,6 +148,7 @@
 				$http.get("rest/login/role").then(function(response) {
 					$scope.rola = response.data;
 					if($scope.rola == "MANAGER"){
+						console.log("HERE")
 						$scope.register = true;
 					}
 				});

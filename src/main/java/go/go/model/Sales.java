@@ -19,7 +19,7 @@ public class Sales {
 	
 	private Integer idProduct;
 	
-	private BigDecimal timesSold;
+	private Long timesSold;
 
 	public String getProductName() {
 		return productName;
@@ -37,15 +37,15 @@ public class Sales {
 		this.idProduct = idProduct;
 	}
 
-	public BigDecimal getTimesSold() {
+	public Long getTimesSold() {
 		return timesSold;
 	}
 
-	public void setTimesSold(BigDecimal timesSold) {
+	public void setTimesSold(Long timesSold) {
 		this.timesSold = timesSold;
 	}
 
-	public Sales(String productName, Integer idProduct, BigDecimal timesSold) {
+	public Sales(String productName, Integer idProduct, Long timesSold) {
 		super();
 		this.productName = productName;
 		this.idProduct = idProduct;

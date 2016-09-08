@@ -1,8 +1,10 @@
 package go.go.services;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -99,8 +101,10 @@ public class OrderService {
 	@GET
 	@Path("type")
 	@Produces(MediaType.APPLICATION_JSON)
-	public OrderType[] getAllOrderTypes() {
-		OrderType[] rv = { OrderType.ACCEPTED, OrderType.COMPLETED };
+	public List<OrderType> getAllOrderTypes() {
+		List<OrderType> rv = new ArrayList<OrderType>();
+		rv.add(OrderType.ACCEPTED);
+		rv.add(OrderType.COMPLETED);
 		return rv;
 	}
 }

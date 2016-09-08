@@ -18,6 +18,7 @@
 <script src="moment.js"></script>
 </head>
 <body>
+	<div id="background"></div>
 	<div ng-app="myApp" ng-controller="myCtrl" class="container"
 		data-ng-init="authenticate()" ng-show="isAuthenticated">
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -66,7 +67,8 @@
 								data-target="#myModal2">Show details</button>
 							<button type="button" class="btn btn-danger btn"
 								ng-click="getTypes(product)" data-toggle="modal"
-								data-target="#myModal" ng-show="rola==true">Change Status</button>
+								data-target="#myModal" ng-show="rola==true">Change
+								Status</button>
 						</td>
 					</tr>
 				</tbody>
@@ -177,7 +179,7 @@
 					$scope.get();
 				})
 				$http.get("rest/login/role").then(function(response) {
-					if(response.data == "BARTENDER"){
+					if (response.data == "BARTENDER") {
 						$scope.rola = true;
 					}
 				});
@@ -206,7 +208,7 @@
 					function(response) {
 						$scope.get();
 						console.log("change");
-					}, function(){
+					}, function() {
 						alert("Please first Accept it");
 					});
 		}
@@ -218,12 +220,12 @@
 					});
 		}
 
-		function timer(){
+		function timer() {
 			$scope.get();
-			setTimeout(timer,5000);
+			setTimeout(timer, 5000);
 		}
 		timer();
-		
+
 		$scope.logout = function() {
 			console.log("HERE");
 			$http.get("rest/logout").then(function(response) {
