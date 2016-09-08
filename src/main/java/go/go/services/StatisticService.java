@@ -80,7 +80,7 @@ public class StatisticService {
 	@GET
 	@Path("sales")
 	@Produces("application/json")
-	public Collection<Sales> asdasd(@QueryParam("date_from")String from, @QueryParam("date_to")String to) {
+	public Collection<Sales> getSales(@QueryParam("date_from")String from, @QueryParam("date_to")String to) {
 		// /go/rest/statistics/sales?date_from=date1&date_to=date2
 		// Tue Aug 02 2016 11:11:00 GMT 0300 (FLE Daylight Time)
 		System.out.println("HERE Sales");
